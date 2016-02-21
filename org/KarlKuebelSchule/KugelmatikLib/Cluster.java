@@ -90,9 +90,26 @@ public class Cluster {
      */
     private void onConnected() {
         kugelmatik.getLog().debug("Cluster [%s, address = %s] onConnected()", getID(), socket.getInetAddress().toString());
+
+        packetsToAcknowledge.clear();
+        packetsSentTimes.clear();
+
         resetRevision();
         sendGetData();
         sendGetClusterConfig();
+    }
+
+    /**
+     * Überprüft die Verbindung.
+     */
+    public boolean checkConnection() {
+        if (!isConnected())
+            return false;
+
+        if (lastSuccessfulPingTime < 0 || System.currentTimeMillis() - lastSuccessfulPingTime > 5000)
+            setPing(-1);
+
+        return isConnected();
     }
 
     /**
@@ -296,9 +313,7 @@ public class Cluster {
      * Sendet ein Ping-Packet an das Cluster. Die Rundlaufzeit kann mit getPing() abgerufen werden.
      */
     public void sendPing() {
-        if (lastSuccessfulPingTime < 0 || System.currentTimeMillis() - lastSuccessfulPingTime > 5000)
-            setPing(-1);
-
+        checkConnection();
         sendPacket(new Ping(System.currentTimeMillis()));
     }
 
@@ -390,13 +405,14 @@ public class Cluster {
                     if (data.length - Packet.HeadSize != Long.BYTES)
                         break;
 
-                    if (!isConnected())
-                        onConnected();
-
+                    boolean wasNotConnected = !checkConnection();
                     lastSuccessfulPingTime = System.currentTimeMillis();
 
                     long sendTime = input.readLong();
                     setPing((int) (System.currentTimeMillis() - sendTime));
+
+                    if (!wasNotConnected)
+                        onConnected();
                     break;
                 case Ack:
                     verbose += "Ack";
