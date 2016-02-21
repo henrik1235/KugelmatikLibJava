@@ -9,8 +9,11 @@ import java.net.SocketException;
  */
 public class Kugelmatik {
     private Cluster[] clusters;
-
     private Log log;
+
+    public Kugelmatik(@NotNull IAddressProvider addressProvider) throws SocketException {
+        this(addressProvider, new Log(LogLevel.Debug));
+    }
 
     public Kugelmatik(@NotNull IAddressProvider addressProvider, Log log) throws SocketException {
         this.log = log;
