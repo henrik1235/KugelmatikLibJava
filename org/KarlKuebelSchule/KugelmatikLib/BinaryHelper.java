@@ -6,6 +6,10 @@ package org.KarlKuebelSchule.KugelmatikLib;
  */
 public class BinaryHelper {
 
+    public static byte buildPosition(int x, int y) {
+        return (byte) ((x << 4) | y);
+    }
+
     public static short getShortFromByteArray(byte[] bytes, int offset) {
         return ((short) ((bytes[offset]) << 8 | (bytes[offset + 1] & 0xFF)));
     }

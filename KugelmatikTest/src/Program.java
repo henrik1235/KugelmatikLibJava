@@ -12,7 +12,7 @@ public class Program {
             log.info("KugelmatikTest running...");
             log.info("=========================");
 
-            InetAddress clusterAddress = InetAddress.getByName("192.168.178.24");
+            InetAddress clusterAddress = InetAddress.getByName("192.168.178.22");
             log.info("Connecting to %s", clusterAddress.toString());
 
             // Config setzen
@@ -53,6 +53,14 @@ public class Program {
             log.info("Move stepper array (different height) to 1000 and 250");
             kugelmatik.setStepper(0, 4, 1000);
             kugelmatik.setStepper(0, 5, 250);
+            kugelmatik.sendMovementData();
+
+            sleep(5000);
+
+            log.info("Test all steppers");
+            for (int x = 0; x < kugelmatik.getStepperWidth(); x++)
+                for (int y = 0; y < kugelmatik.getStepperHeight(); y++)
+                    kugelmatik.setStepper(x, y, x * 100 + x);
             kugelmatik.sendMovementData();
 
             log.info("========================================================");

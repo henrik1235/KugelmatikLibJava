@@ -14,32 +14,20 @@ public class MoveAllSteppersArray extends Packet {
     private short[] heights;
     private byte[] waitTimes;
 
-    public MoveAllSteppersArray(short[] heights, byte[] waitTimes){
-        if (heights == null)
-            throw new IllegalArgumentException("heights is null");
-        if (waitTimes == null)
-            throw new IllegalArgumentException("waitTimes is null");
-        if (heights.length != Cluster.Width * Cluster.Height)
-            throw new IllegalArgumentException("heights length does not match stepper count of cluster");
-        if (waitTimes.length != heights.length)
-            throw new IllegalArgumentException("heights length does not match wait times lengths");
+    public MoveAllSteppersArray(Cluster cluster){
+        int stepperCount = Cluster.Width * Cluster.Height;
 
-        this.heights = heights;
-        this.waitTimes = waitTimes;
-    }
-    public MoveAllSteppersArray(Stepper[] steppers){
-        if (steppers == null)
-            throw new IllegalArgumentException("steppers is null");
-        if (steppers.length != Cluster.Width * Cluster.Height)
-            throw new IllegalArgumentException("steppers length does not match stepper count of cluster");
+        this.heights = new short[stepperCount];
+        this.waitTimes = new byte[stepperCount];
 
-        this.heights = new short[steppers.length];
-        this.waitTimes = new byte[steppers.length];
-
-        for (int i = 0; i < steppers.length; i++) {
-            Stepper stepper = steppers[i];
-            this.heights[i] = stepper.getHeight();
-            this.waitTimes[i] = stepper.getWaitTime();
+        int i = 0;
+        // beide for-Schleifen müssen in der Reihenfolge übereinstimmen mit der Firmware, sonst stimmen die Positionen nicht mehr
+        for (int x = 0; x < Cluster.Width; x++) {
+            for (int y = 0; y < Cluster.Height; y++) {
+                Stepper stepper = cluster.getStepperByPosition(x, y);
+                heights[i] = stepper.getHeight();
+                waitTimes[i++] = stepper.getWaitTime();
+            }
         }
     }
 

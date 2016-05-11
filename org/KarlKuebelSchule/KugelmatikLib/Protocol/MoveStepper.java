@@ -41,7 +41,7 @@ public class MoveStepper extends Packet {
 
     @Override
     protected void allocateBuffer(ByteBuffer buffer) {
-        buffer.put((byte) ((x << 4) | y));
+        buffer.put(BinaryHelper.buildPosition(x, y));
         buffer.putShort(BinaryHelper.flipByteOrder(height));
         buffer.put(waitTime);
     }

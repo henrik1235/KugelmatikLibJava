@@ -284,7 +284,7 @@ public class Cluster {
                 return sendPacket(new MoveSteppersArray(changedSteppers), guaranteed);
         }
 
-        return sendPacket(new MoveAllSteppersArray(steppers), guaranteed);
+        return sendPacket(new MoveAllSteppersArray(this), guaranteed);
     }
 
     /**
@@ -538,7 +538,7 @@ public class Cluster {
      * @param y Die y-Koordinate des Steppers
      * @return Der Stepper an der Postion
      */
-    public Stepper getStepperByPosition(byte x, byte y) {
+    public Stepper getStepperByPosition(int x, int y) {
         if (x < 0 || x >= Width)
             throw new IllegalArgumentException("x is out of range");
         if (y < 0 || y >= Height)

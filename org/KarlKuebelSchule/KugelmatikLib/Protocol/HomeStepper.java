@@ -34,6 +34,6 @@ public class HomeStepper extends Packet {
     @Override
     protected void allocateBuffer(ByteBuffer buffer) {
         buffer.putInt(BinaryHelper.flipByteOrder(0xABCD));
-        buffer.put((byte) ((x << 4) | y));
+        buffer.put(BinaryHelper.buildPosition(x, y));
     }
 }

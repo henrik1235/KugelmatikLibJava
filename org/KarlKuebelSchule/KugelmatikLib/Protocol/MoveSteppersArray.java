@@ -49,8 +49,8 @@ public class MoveSteppersArray extends Packet {
     protected void allocateBuffer(ByteBuffer buffer) {
         buffer.put(((byte) items.length));
         for (Item item : items) {
-            buffer.put(((byte) ((item.getX() << 4) | item.getY())));
-            buffer.putShort(BinaryHelper.flipByteOrder(item.height));
+            buffer.put(BinaryHelper.buildPosition(item.getX(), item.getY()));
+            buffer.putShort(BinaryHelper.flipByteOrder(item.getHeight()));
             buffer.put(item.getWaitTime());
         }
     }
