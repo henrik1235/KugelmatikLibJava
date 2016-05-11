@@ -17,9 +17,9 @@ public class ClusterConfig {
      * Erstellt eine neue ClusterConfig-Instanz mit Standardwerten
      */
     public ClusterConfig() {
-        stepMode = StepMode.HalfStep;
-        tickTime = 4000;
-        useBreak = false;
+        stepMode = StepMode.FullStep;
+        tickTime = 1900;
+        useBreak = true;
     }
 
     /**
