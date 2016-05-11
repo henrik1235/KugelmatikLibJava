@@ -8,6 +8,8 @@ import java.net.SocketException;
  * Repräsentiert eine Kugelmatik
  */
 public class Kugelmatik {
+    public static final int VERSION = 15;
+
     private Cluster[] clusters;
     private Log log;
 
@@ -19,6 +21,7 @@ public class Kugelmatik {
         this.log = log;
         clusters = new Cluster[Config.KugelmatikHeight * Config.KugelmatikWidth];
 
+        getLog().info("Kugelmatik Java Library... Version %d", VERSION);
         getLog().verbose("Creating clusters with address provider " + addressProvider.getClass().getSimpleName());
         for (int x = 0; x < Config.KugelmatikWidth; x++)
             for (int y = 0; y < Config.KugelmatikHeight; y++)
