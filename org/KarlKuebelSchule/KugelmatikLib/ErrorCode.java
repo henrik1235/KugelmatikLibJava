@@ -4,26 +4,35 @@ package org.KarlKuebelSchule.KugelmatikLib;
  * Gibt die Fehler an, die auf beim Betrieb eines Clusters auftreten können.
  */
 public enum ErrorCode {
-    None((byte)0),
-    TooShort((byte)1),
-    InvalidX((byte)2),
-    InvalidY((byte)3),
-    InvalidMagic((byte)4),
-    BufferOverflow((byte)5),
-    UnkownPacket((byte)6),
-    NotRunningBusy((byte)7),
-    InvalidConfigValue((byte)8),
-    InvalidHeight((byte)9),
-    InvalidValue((byte)10);
-
+    None(0),
+    TooShort(1),
+    InvalidX(2),
+    InvalidY(3),
+    InvalidMagic(4),
+    BufferOverflow(5),
+    UnknownPacket(6),
+    NotRunningBusy(7),
+    InvalidConfigValue(8),
+    InvalidHeight(9),
+    InvalidValue(10),
+    NotAllowedToRead(11),
+    PacketSizeBufferOverflow(12),
+    Internal(255);
 
     private byte value;
 
-    ErrorCode(byte value) {
-        this.value = value;
+    ErrorCode(int value) {
+        this.value = (byte)value;
     }
 
     public byte getValue() {
         return value;
+    }
+
+    public static ErrorCode getCode(byte value) {
+        for (ErrorCode code : ErrorCode.values())
+            if (code.getValue() == value)
+                return code;
+        return null;
     }
 }

@@ -441,7 +441,7 @@ public class Cluster {
 
                     ErrorCode lastErrorCode = ErrorCode.None;
                     if (buildVersion >= 12)
-                        lastErrorCode = ErrorCode.values()[input.readByte()];
+                        lastErrorCode = ErrorCode.getCode(input.readByte());
 
                     int freeRam = -1;
                     if (buildVersion >= 14)
