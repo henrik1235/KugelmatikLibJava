@@ -445,9 +445,10 @@ public class Cluster {
 
                     int freeRam = -1;
                     if (buildVersion >= 14)
-                        freeRam = BinaryHelper.flipByteOrder(input.readInt());
+                        freeRam = BinaryHelper.flipByteOrder(input.readShort()); // in Wirklichkeit unsigned short
 
-                    clusterInfo = new ClusterInfo(buildVersion, currentBusyCommand, highestRevision, new ClusterConfig(StepMode.values()[stepMode - 1], delayTime, useBreak), lastErrorCode, freeRam);
+                    clusterInfo = new ClusterInfo(buildVersion, currentBusyCommand, highestRevision,
+                            new ClusterConfig(StepMode.values()[stepMode - 1], delayTime, useBreak), lastErrorCode, freeRam);
                     break;
                 case GetData:
                     verbose += "StepperData";
