@@ -40,6 +40,7 @@ public class Cluster {
     private Map<Integer, Packet> packetsToAcknowledge;
     private Map<Integer, Long> packetsSentTimes;
 
+
     /**
      * Gibt eine neue Instanz eines Clusters zurück
      *
@@ -99,6 +100,12 @@ public class Cluster {
         sendGetClusterConfig();
     }
 
+    private long getTimeSinceLastPing() {
+        if (lastSuccessfulPingTime < 0)
+            return Long.MAX_VALUE;
+        return System.currentTimeMillis() - lastSuccessfulPingTime;
+    }
+
     /**
      * Überprüft die Verbindung.
      */
@@ -106,7 +113,7 @@ public class Cluster {
         if (!isConnected())
             return false;
 
-        if (lastSuccessfulPingTime < 0 || System.currentTimeMillis() - lastSuccessfulPingTime > 5000)
+        if (getTimeSinceLastPing() > 5000)
             setPing(-1);
 
         return isConnected();
@@ -237,6 +244,9 @@ public class Cluster {
         if (sentSomething)
             for (Stepper stepper : steppers)
                 stepper.internalOnDataSent();
+
+        if (getTimeSinceLastPing() > 1000)
+            sendPing();
 
         return sentSomething;
     }
