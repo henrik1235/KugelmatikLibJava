@@ -17,15 +17,26 @@ public enum ErrorCode {
     InvalidValue(10),
     NotAllowedToRead(11),
     PacketSizeBufferOverflow(12),
-    Internal(255);
 
-    private byte value;
+    McpFault1(13),
+    McpFault2(13),
+    McpFault3(14),
+    McpFault4(15),
+    McpFault5(16),
+    McpFault6(17),
+    McpFault7(18),
+    McpFault8(19),
+
+    Internal(255),
+    UnknownError(Integer.MAX_VALUE);
+
+    private int value;
 
     ErrorCode(int value) {
-        this.value = (byte)value;
+        this.value = value;
     }
 
-    public byte getValue() {
+    public int getValue() {
         return value;
     }
 
@@ -33,6 +44,6 @@ public enum ErrorCode {
         for (ErrorCode code : ErrorCode.values())
             if (code.getValue() == value)
                 return code;
-        return null;
+        return ErrorCode.UnknownError;
     }
 }
