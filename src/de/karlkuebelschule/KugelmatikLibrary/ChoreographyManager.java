@@ -1,7 +1,5 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
-import com.sun.istack.internal.NotNull;
-
 import java.security.InvalidParameterException;
 
 /**
@@ -25,7 +23,7 @@ public class ChoreographyManager implements Runnable {
      * @param targetFPS    Die Zielframerate die erreicht werden soll
      * @param choreography Die Choreography die abgespielt werden soll
      */
-    public ChoreographyManager(@NotNull Kugelmatik kugelmatik, int targetFPS, @NotNull IChoreography choreography) {
+    public ChoreographyManager(Kugelmatik kugelmatik, int targetFPS, IChoreography choreography) {
         if (targetFPS <= 0)
             throw new InvalidParameterException("targetFPS is out of range");
 
@@ -72,15 +70,15 @@ public class ChoreographyManager implements Runnable {
         return fps;
     }
 
-    private void setSteppers() {
+    private void setSteppers(long time) {
         for (int x = 0; x < kugelmatik.getStepperWidth(); x++)
             for (int y = 0; y < kugelmatik.getStepperHeight(); y++)
-                kugelmatik.getStepperByPosition(x, y).set(choreography.getHeight(x, y, 0, this));
+                kugelmatik.getStepperByPosition(x, y).set(choreography.getHeight(x, y, time, this));
     }
 
     @Override
     public void run() {
-        setSteppers();
+        setSteppers(0);
 
         kugelmatik.sendMovementData(true);
         while (kugelmatik.isAnyPacketPending()) {
@@ -92,14 +90,20 @@ public class ChoreographyManager implements Runnable {
         choreographyRunning = true;
         long startTime = System.currentTimeMillis();
 
+        long ticksRunning = 0;
+
         while (!stopRequested) {
             long frameStartTime = System.currentTimeMillis();
             long timeRunning = System.currentTimeMillis() - startTime;
 
-            setSteppers();
-            kugelmatik.sendMovementData();
+            setSteppers(timeRunning);
 
-            if (timeRunning % 2 == 0)
+            if (timeRunning % 200 == 0)
+                kugelmatik.sendMovementData(false, true);
+            else
+                kugelmatik.sendMovementData();
+
+            if (ticksRunning % 10 == 0)
                 kugelmatik.sendPing();
 
             int sleepTime = (int) (1000f / targetFPS) - (int) (System.currentTimeMillis() - frameStartTime); // berechnen wie lange der Thread schlafen soll um die TargetFPS zu erreichen
@@ -107,6 +111,7 @@ public class ChoreographyManager implements Runnable {
                 sleep(sleepTime);
 
             fps = (int) Math.ceil(1000f / (int) (System.currentTimeMillis() - frameStartTime));
+            ticksRunning++;
 
         }
         choreographyRunning = false;

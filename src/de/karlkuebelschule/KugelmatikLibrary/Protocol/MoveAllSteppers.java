@@ -6,7 +6,7 @@ import de.karlkuebelschule.KugelmatikLibrary.Config;
 import java.nio.ByteBuffer;
 
 /**
- * Befehl um alle Stepper des Clusters auf eine Höhe zu bringen
+ * Befehl um alle Stepper des Clusters auf eine Höhe zu bringen.
  */
 public class MoveAllSteppers extends Packet {
     private short height;

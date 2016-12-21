@@ -5,7 +5,7 @@ import de.karlkuebelschule.KugelmatikLibrary.BinaryHelper;
 import java.nio.ByteBuffer;
 
 /**
- * Befehl eine Kugel vollständig hochzufahren, dabei wird die aktuelle Höhe der Kugel ignoriert.
+ * Stellt den Home Befehl dar. Bewegt alle Stepper eines Clusters vollständig nach oben. Die derzeitige Höhe wird ignoriert.
  */
 public class Home extends Packet {
     @Override

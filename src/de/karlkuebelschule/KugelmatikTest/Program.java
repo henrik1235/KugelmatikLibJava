@@ -64,14 +64,15 @@ public class Program {
 
             log.info("========================================================");
             log.info("Done....");
-            while (true) ;
+
+            sleep(Long.MAX_VALUE);
         } catch (Exception e) {
-            log.error("Whoooopps!");
+            log.error("Whoooopps! Internal error while testing:");
             e.printStackTrace();
         }
     }
 
-    private static void sleep(int time) {
+    private static void sleep(long time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {

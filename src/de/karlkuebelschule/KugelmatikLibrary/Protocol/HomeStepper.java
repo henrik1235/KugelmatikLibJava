@@ -6,7 +6,8 @@ import de.karlkuebelschule.KugelmatikLibrary.Cluster;
 import java.nio.ByteBuffer;
 
 /**
- * Der Home Befehl f�r einen Stepper
+ * Stellt den Home Befehl für einen Stepper dar.
+ * Bewegt einen Stepper eines Clusters vollständig nach oben. Die derzeitige Höhe wird ignoriert.
  */
 public class HomeStepper extends Packet {
     private byte x, y;

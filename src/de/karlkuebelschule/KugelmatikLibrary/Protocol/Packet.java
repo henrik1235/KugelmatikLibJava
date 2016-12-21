@@ -6,7 +6,7 @@ import java.net.DatagramPacket;
 import java.nio.ByteBuffer;
 
 /**
- * Eine abstrakte Klasse für Packete die an die Kugelmatik übermittelt werden
+ * Eine abstrakte Klasse für Pakete, welche an die Kugelmatik übermittelt werden
  */
 public abstract class Packet {
     /**
@@ -32,12 +32,11 @@ public abstract class Packet {
      * Erstellt ein Packet mit allen Informationen für den Befehl.
      *
      * @param guaranteed Gibt an, ob das Packet garantiert ankommen soll.
-     * @param revision   Gibt die Revision des Pakcets an.
-     * @return Das DatagramPacket das via eines DatagramSockets an das Cluster übermittelt wird
+     * @param revision   Gibt die Revision des Pakets an.
+     * @return Das DatagramPacket, welches an das Cluster übermittelt wird.
      */
     public DatagramPacket getPacket(boolean guaranteed, int revision) {
         ByteBuffer buffer = ByteBuffer.allocate(HeadSize + getDataSize());
-        //buffer.order(ByteOrder.BIG_ENDIAN);
 
         buffer.put((byte) 'K');
         buffer.put((byte) 'K');
@@ -51,7 +50,7 @@ public abstract class Packet {
     }
 
     /**
-     * Schreibt die Daten des Packets in einen ByteBuffer.
+     * Schreibt die Daten des Pakets in einen ByteBuffer.
      *
      * @param buffer Der ByteBuffer in dem die Daten geschrieben werden sollen.
      */

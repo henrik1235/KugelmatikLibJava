@@ -5,7 +5,7 @@ import de.karlkuebelschule.KugelmatikLibrary.Config;
 import de.karlkuebelschule.KugelmatikLibrary.IChoreography;
 
 /**
- * Stellt eine sich bewegende Sinuswelle da
+ * Eine Choreography um eine bewegte Sinuswelle darzustellen.
  */
 public class SineWave implements IChoreography {
     private WaveDirection direction;
@@ -15,7 +15,7 @@ public class SineWave implements IChoreography {
     /**
      * Erstellt eine neue SineWave-Instanz
      *
-     * @param direction  Die Richtung in der Sinuswelle
+     * @param direction  Die Richtung der Sinuswelle
      * @param timeFactor Der Zeitfaktor der Sinuswelle
      * @param frequency  Die Frequenz der Sinuswelle
      */

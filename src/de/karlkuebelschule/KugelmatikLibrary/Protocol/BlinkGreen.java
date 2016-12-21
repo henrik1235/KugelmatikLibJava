@@ -3,7 +3,7 @@ package de.karlkuebelschule.KugelmatikLibrary.Protocol;
 import java.nio.ByteBuffer;
 
 /**
- * Befehl um die grüne LED am Cluster blinken zu lassen
+ * Befehl um die grüne LED am Cluster blinken zu lassen.
  */
 public class BlinkGreen extends Packet {
     @Override

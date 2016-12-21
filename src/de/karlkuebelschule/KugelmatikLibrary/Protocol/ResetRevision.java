@@ -3,7 +3,7 @@ package de.karlkuebelschule.KugelmatikLibrary.Protocol;
 import java.nio.ByteBuffer;
 
 /**
- * Setzt die Revsionsnummer für Befehle auf dem Cluster zurück.
+ * Setzt die Revisionsnummer für Befehle auf dem Cluster zurück.
  */
 public class ResetRevision extends Packet {
     @Override

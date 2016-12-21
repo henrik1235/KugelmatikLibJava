@@ -1,8 +1,5 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
-import com.sun.istack.internal.NotNull;
-
-import java.security.InvalidParameterException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,7 +15,7 @@ public class KugelmatikScheduler {
      *
      * @param kugelmatik Die Kugelmatik für welche die Aktionen ausgeführt werden sollen
      */
-    public KugelmatikScheduler(@NotNull Kugelmatik kugelmatik) {
+    public KugelmatikScheduler(Kugelmatik kugelmatik) {
         this.kugelmatik = kugelmatik;
         timer = new Timer();
     }
@@ -47,22 +44,22 @@ public class KugelmatikScheduler {
      * @param task     Der aufzurufende TimerTask
      * @param interval Das Interval in dem der TimerTask aufgerufen werden soll
      */
-    protected void scheduleTimerTask(@NotNull TimerTask task, long interval) {
+    protected void scheduleTimerTask(TimerTask task, long interval) {
         if (interval <= 0)
-            throw new InvalidParameterException("interval must be greater than 0");
+            throw new IllegalArgumentException("interval must be greater than 0");
 
         timer.scheduleAtFixedRate(task, 0, interval);
     }
 
     /**
-     * L�scht alle vorher definierten Tasks
+     * Löscht alle vorher definierten Tasks
      */
     public void removeAll() {
         timer.purge();
     }
 
     /**
-     * Gibt das Kugelmatik object zur�ck, welches mit dem Schedule verk�pft ist
+     * Gibt das Kugelmatik object zurück, welches mit dem Schedule verknüpft ist
      */
     public Kugelmatik getKugelmatik() {
         return kugelmatik;

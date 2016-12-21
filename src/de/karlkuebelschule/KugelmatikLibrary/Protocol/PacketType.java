@@ -1,7 +1,7 @@
 package de.karlkuebelschule.KugelmatikLibrary.Protocol;
 
 /**
- * Eine Enumeration aller M�glichen Pakettypen
+ * Eine Enumeration aller möglichen Pakettypen
  */
 public enum PacketType {
     Ping((byte) 1),

@@ -1,14 +1,11 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
-import com.sun.istack.internal.NotNull;
-
 import java.security.InvalidParameterException;
 
 /**
- * Stellt die Konfiguration eines Clusters da
+ * Stellt die Konfiguration eines Clusters dar.
  */
 public class ClusterConfig {
-
     private StepMode stepMode;
     private int tickTime;
     private boolean useBreak;
@@ -27,9 +24,9 @@ public class ClusterConfig {
      *
      * @param stepMode  Der Schrittmodus der Motoren des Clusters
      * @param delayTime Die Delaytime des Clusters
-     * @param useBreak  Ob das Cluster die Bremsen benutzen soll
+     * @param useBreak  Ob das Cluster die Bremse benutzen soll
      */
-    public ClusterConfig(@NotNull StepMode stepMode, int delayTime, boolean useBreak) {
+    public ClusterConfig(StepMode stepMode, int delayTime, boolean useBreak) {
         if (delayTime < 50 || delayTime > 15000)
             throw new InvalidParameterException("delayTime is out of range: " + delayTime);
 
@@ -42,7 +39,7 @@ public class ClusterConfig {
         return stepMode;
     }
 
-    public void setStepMode(@NotNull StepMode stepMode) {
+    public void setStepMode(StepMode stepMode) {
         this.stepMode = stepMode;
     }
 

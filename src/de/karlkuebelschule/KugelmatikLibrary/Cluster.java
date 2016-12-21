@@ -1,6 +1,5 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
-import com.sun.istack.internal.NotNull;
 import de.karlkuebelschule.KugelmatikLibrary.Protocol.*;
 
 import java.io.ByteArrayInputStream;
@@ -49,7 +48,7 @@ public class Cluster {
      * @param x          Die x-Koordinate der Position des Clusters in der kugelmatik
      * @param y          Die y-Koordinate der Position der Clusters in der kugelmatik
      */
-    public Cluster(@NotNull Kugelmatik kugelmatik, InetAddress address, int x, int y) {
+    public Cluster(Kugelmatik kugelmatik, InetAddress address, int x, int y) {
         if (x < 0)
             throw new IllegalArgumentException("The argument 'x' is out of range.");
         if (y < 0)
@@ -159,7 +158,7 @@ public class Cluster {
      * @param guaranteed Bei true mit Garantie, bei false ohne Garantie
      * @return Gibt zurück ob ein Packet gesendet wurde
      */
-    public boolean sendPacket(@NotNull Packet packet, boolean guaranteed) {
+    public boolean sendPacket(Packet packet, boolean guaranteed) {
         return sendPacketInternal(packet, guaranteed, currentRevision++);
     }
 
@@ -171,7 +170,7 @@ public class Cluster {
      * @param revision   Die Revision mit der das Packet gesendet werden soll
      * @return Gibt zurück ob ein Packet gesendet wurde
      */
-    protected boolean sendPacketInternal(@NotNull Packet packet, boolean guaranteed, int revision) {
+    protected boolean sendPacketInternal(Packet packet, boolean guaranteed, int revision) {
         // bei keiner Verbindung Paket ignorieren
         if (socket == null)
             return false;
@@ -266,7 +265,7 @@ public class Cluster {
         if (sendAllSteppers)
             changedSteppers = steppers;
         else
-            changedSteppers = Arrays.asList(steppers).stream().filter(Stepper::hasDataChanged).toArray(Stepper[]::new);
+            changedSteppers = Arrays.stream(steppers).filter(Stepper::hasDataChanged).toArray(Stepper[]::new);
 
         if (changedSteppers.length == 0)
             return false;
@@ -276,7 +275,7 @@ public class Cluster {
             return sendPacket(new MoveStepper(stepper.getX(), stepper.getY(), stepper.getHeight(), stepper.getWaitTime()), guaranteed);
         }
 
-        boolean allSteppersSameValues = StepperUtil.AllSteppersSameValues(steppers);
+        boolean allSteppersSameValues = StepperUtil.allSteppersSameValues(steppers);
 
         if (allSteppersSameValues)
             return sendPacket(new MoveAllSteppers(steppers[0].getHeight(), steppers[0].getWaitTime()), guaranteed);
@@ -286,7 +285,7 @@ public class Cluster {
         // wenn die Anzahl der Stepper zu groß ist, dann
         // ist es uneffizent die Position für jeden Stepper mitzuschicken
         if (changedSteppers.length < 8) {
-            boolean allChangedSameValues = StepperUtil.AllSteppersSameValues(changedSteppers);
+            boolean allChangedSameValues = StepperUtil.allSteppersSameValues(changedSteppers);
 
             if (allChangedSameValues)
                 return sendPacket(new MoveSteppers(changedSteppers, changedSteppers[0].getHeight(), changedSteppers[0].getWaitTime()), guaranteed);
@@ -435,7 +434,7 @@ public class Cluster {
                     if (buildVersion >= 11)
                         currentBusyCommand = BusyCommand.values()[input.readByte()];
                     else if (buildVersion >= 8)
-                        currentBusyCommand = input.read() > 0 ? BusyCommand.Unkown : BusyCommand.None;
+                        currentBusyCommand = input.read() > 0 ? BusyCommand.Unknown : BusyCommand.None;
 
                     int highestRevision = 0;
                     if (buildVersion >= 9)

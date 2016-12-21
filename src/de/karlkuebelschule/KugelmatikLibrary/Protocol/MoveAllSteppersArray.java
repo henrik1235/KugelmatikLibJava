@@ -7,8 +7,7 @@ import de.karlkuebelschule.KugelmatikLibrary.Stepper;
 import java.nio.ByteBuffer;
 
 /**
- * Created by Henrik Kunzelmann on 20.12.2015.
- * Befehl zum Bewegen aller Stepper mit unterschiedlicher Hoehe und Waittime.
+ * Befehl zum Bewegen aller Stepper mit unterschiedlichen Höhen und WaitTimes.
  */
 public class MoveAllSteppersArray extends Packet {
     private short[] heights;

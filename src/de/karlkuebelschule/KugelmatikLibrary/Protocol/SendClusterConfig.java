@@ -1,6 +1,5 @@
 package de.karlkuebelschule.KugelmatikLibrary.Protocol;
 
-import com.sun.istack.internal.NotNull;
 import de.karlkuebelschule.KugelmatikLibrary.BinaryHelper;
 import de.karlkuebelschule.KugelmatikLibrary.ClusterConfig;
 
@@ -12,7 +11,7 @@ import java.nio.ByteBuffer;
 public class SendClusterConfig extends Packet {
     private ClusterConfig config;
 
-    public SendClusterConfig(@NotNull ClusterConfig config) {
+    public SendClusterConfig(ClusterConfig config) {
         this.config = config;
     }
 

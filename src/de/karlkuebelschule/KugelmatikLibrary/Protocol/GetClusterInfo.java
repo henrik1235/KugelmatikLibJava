@@ -3,7 +3,7 @@ package de.karlkuebelschule.KugelmatikLibrary.Protocol;
 import java.nio.ByteBuffer;
 
 /**
- * Befehl um die Konfiguration vom Cluster abzurufen
+ * Befehl um die Konfiguration vom Cluster abzurufen.
  */
 public class GetClusterInfo extends Packet {
     @Override

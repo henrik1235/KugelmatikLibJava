@@ -6,7 +6,7 @@ import de.karlkuebelschule.KugelmatikLibrary.Cluster;
 import java.nio.ByteBuffer;
 
 /**
- * Der Befehl zum vollständigen Herrunterfahren einer Kugel, dabei wird die maximale Höhe ignoriert.
+ * Der Fix Befehl zum vollständigen Herrunterfahren eines Steppers, dabei wird die maximale Anzahl an Schritten ignoriert.
  */
 public class Fix extends Packet {
     private byte x, y;

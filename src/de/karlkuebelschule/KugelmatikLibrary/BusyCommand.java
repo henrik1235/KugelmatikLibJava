@@ -1,14 +1,15 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
 /**
- * Gibt alle Befehle an bei dennen das Cluster in einem blockierenden (Busy) Zustand ist.
+ * Gibt alle Busy-Befehle an.
+ * Bei einem Busy-Befehl geht das Cluster in einen blockierenden (Busy) Zustand über.
  */
 public enum BusyCommand {
     None((byte) 0),
     Home((byte) 1),
     Fix((byte) 2),
     HomeStepper((byte) 3),
-    Unkown(Byte.MAX_VALUE);
+    Unknown(Byte.MAX_VALUE);
 
     private byte value;
 

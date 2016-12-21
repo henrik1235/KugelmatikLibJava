@@ -10,7 +10,6 @@ import java.nio.ByteBuffer;
  * Befehl zum Bewegen einer einzelnen Steppers auf einem Cluster.
  */
 public class MoveStepper extends Packet {
-
     private byte x, y;
     private short height;
     private byte waitTime;

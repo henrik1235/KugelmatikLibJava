@@ -1,27 +1,15 @@
 package de.karlkuebelschule.KugelmatikLibrary.Protocol;
 
 import de.karlkuebelschule.KugelmatikLibrary.BinaryHelper;
-import de.karlkuebelschule.KugelmatikLibrary.Cluster;
-import de.karlkuebelschule.KugelmatikLibrary.Config;
 import de.karlkuebelschule.KugelmatikLibrary.Stepper;
 
 import java.nio.ByteBuffer;
-import java.security.InvalidParameterException;
 
 /**
- * Befehl zum Bewegen mehrerer Kugeln in jeweils eigene H�hen mit eigener waitTime
+ * Befehl zum Bewegen mehrerer Stepper auf bestimmte Höhen und WaitTimes.
  */
 public class MoveSteppersArray extends Packet {
     private Item[] items;
-
-    public MoveSteppersArray(Item[] items) {
-        if (items == null)
-            throw new IllegalArgumentException("items is null");
-        if (items.length == 0 || items.length > Cluster.Width * Cluster.Height)
-            throw new IllegalArgumentException("items has invalid size (" + items.length + ")");
-
-        this.items = items;
-    }
 
     public MoveSteppersArray(Stepper[] steppers) {
         if (steppers == null)
@@ -55,21 +43,11 @@ public class MoveSteppersArray extends Packet {
         }
     }
 
-    public class Item {
+    private class Item {
         private byte x;
         private byte y;
         private short height;
         private byte waitTime;
-
-        public Item(byte x, byte y, short height, byte WaitTime) {
-            if (height > Config.MaxHeight)
-                throw new InvalidParameterException("height is out of range");
-
-            this.x = x;
-            this.y = y;
-            this.height = height;
-            this.waitTime = WaitTime;
-        }
 
         public Item(Stepper stepper) {
             this.x = stepper.getX();

@@ -1,7 +1,5 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
-import com.sun.istack.internal.NotNull;
-
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,7 +29,7 @@ public class Log {
      * @param out      Gibt den PrintStream an, über dem Log-Einträge geschrieben werden sollen.
      * @param logLevel Gibt den mindest LogLevel an, ab dem Log-Einträge angezeigt werden sollen.
      */
-    public Log(@NotNull PrintStream out, LogLevel logLevel) {
+    public Log(PrintStream out, LogLevel logLevel) {
         this(out, null, logLevel);
     }
 
@@ -42,7 +40,7 @@ public class Log {
      * @param err      Gibt den PrintStream an, über dem Fehler Log-Einträge geschrieben werden sollen.
      * @param logLevel Gibt den mindest LogLevel an, ab dem Log-Einträge angezeigt werden sollen.
      */
-    public Log(@NotNull PrintStream out, PrintStream err, LogLevel logLevel) {
+    public Log(PrintStream out, PrintStream err, LogLevel logLevel) {
         this.out = out;
         this.err = err;
         this.logLevel = logLevel;
@@ -118,7 +116,7 @@ public class Log {
         return out;
     }
 
-    public void setOut(@NotNull PrintStream out) {
+    public void setOut(PrintStream out) {
         this.out = out;
     }
 }

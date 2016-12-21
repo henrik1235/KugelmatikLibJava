@@ -1,7 +1,5 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
-import com.sun.istack.internal.NotNull;
-
 /**
  * Repräsentiert einen Schrittmotor eines Clusters
  */
@@ -22,7 +20,7 @@ public class Stepper {
 
     private IHeightChangedHandler heightChangedHandler;
 
-    public Stepper(@NotNull Cluster cluster, byte x, byte y) {
+    public Stepper(Cluster cluster, byte x, byte y) {
         if (x < 0 || x >= Cluster.Width)
             throw new IllegalArgumentException("x");
         if (y < 0 || y >= Cluster.Height)
@@ -175,7 +173,7 @@ public class Stepper {
     }
 
     /**
-     * Gibt das zugeh�rige Cluster zurück.
+     * Gibt das zugehörige Cluster zurück.
      */
     public Cluster getCluster() {
         return cluster;

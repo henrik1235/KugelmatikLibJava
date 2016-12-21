@@ -5,21 +5,18 @@ package de.karlkuebelschule.KugelmatikLibrary;
  * Eine Hilfsklasse für Binäroperationen
  */
 public class BinaryHelper {
-
     public static byte buildPosition(int x, int y) {
         return (byte) ((x << 4) | y);
     }
 
-    public static short getShortFromByteArray(byte[] bytes, int offset) {
-        return ((short) ((bytes[offset]) << 8 | (bytes[offset + 1] & 0xFF)));
+    private static int getIntFromByteArray(byte[] bytes) {
+        return bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3];
     }
 
-    public static int getIntFromByteArray(byte[] bytes, int offset) {
-        return bytes[offset] << 24 | (bytes[offset + 1] & 0xFF) << 16 | (bytes[offset + 2] & 0xFF) << 8 | (bytes[offset + 3] & 0xFF);
-    }
-
-    public static long getLongFromByteArray(byte[] bytes, int offset) {
-        return (bytes[offset] & 0xFF) << 54 | (bytes[offset + 1] & 0xFF) << 48 | (bytes[offset + 2] & 0xFF) << 40 | (bytes[offset + 3] & 0xFF) << 32 | (bytes[offset + 4] & 0xFF) << 24 | (bytes[offset + 5] & 0xFF) << 16 | (bytes[offset + 6] & 0xFF) << 8 | (bytes[offset + 7] & 0xFF);
+    private static long getLongFromByteArray(byte[] bytes) {
+        long high = (long) bytes[0] << 54 | (long) bytes[1] << 48 | (long) bytes[2] << 40 | (long) bytes[3] << 32;
+        long low = bytes[4] << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7];
+        return high | low;
     }
 
     public static int flipByteOrder(int val) {
@@ -29,7 +26,7 @@ public class BinaryHelper {
                 (byte) (val >> 16),
                 (byte) (val >> 24),
         };
-        return getIntFromByteArray(bytes, 0);
+        return getIntFromByteArray(bytes);
     }
 
     public static short flipByteOrder(short val) {
@@ -47,6 +44,6 @@ public class BinaryHelper {
                 (byte) (val >> 48),
                 (byte) (val >> 56),
         };
-        return getLongFromByteArray(bytes, 0);
+        return getLongFromByteArray(bytes);
     }
 }
