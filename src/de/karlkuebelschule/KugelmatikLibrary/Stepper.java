@@ -21,10 +21,12 @@ public class Stepper {
     private IHeightChangedHandler heightChangedHandler;
 
     public Stepper(Cluster cluster, byte x, byte y) {
+        if (cluster == null)
+            throw new IllegalArgumentException("cluster is null");
         if (x < 0 || x >= Cluster.Width)
-            throw new IllegalArgumentException("x");
+            throw new IllegalArgumentException("x is out of range");
         if (y < 0 || y >= Cluster.Height)
-            throw new IllegalArgumentException("y");
+            throw new IllegalArgumentException("y is out of range");
 
         this.cluster = cluster;
         this.x = x;
@@ -115,7 +117,7 @@ public class Stepper {
     /**
      * Wird aufgerufen, wenn das Cluster Daten gesendet hat.
      */
-    public void internalOnDataSent() {
+    void internalOnDataSent() {
         lastHeight = height;
         lastWaitTime = waitTime;
     }

@@ -64,6 +64,9 @@ public class ClusterConfig {
     public ClusterConfig(DataInputStream stream) throws IOException {
         this();
 
+        if (stream == null)
+            throw new IllegalArgumentException("steam is null");
+
         int size = BinaryHelper.flipByteOrder(stream.readShort());
 
         if (size != SIZE)
@@ -85,6 +88,9 @@ public class ClusterConfig {
     }
 
     public void write(ByteBuffer buffer) {
+        if (buffer == null)
+            throw new IllegalArgumentException("buffer is null");
+
         buffer.putShort((short)SIZE);
 
         buffer.put(stepMode.getByteValue());

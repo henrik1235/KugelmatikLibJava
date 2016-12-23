@@ -1,7 +1,5 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
-import java.security.InvalidParameterException;
-
 /**
  * Der ChoreographyManager berechnet die Bewegungen für eine Chereographie und sendet die Daten an die Kugelmatik.
  */
@@ -13,8 +11,8 @@ public class ChoreographyManager implements Runnable {
 
     private Thread thread;
 
-    private boolean stopRequested;
-    private boolean choreographyRunning = false;
+    private volatile boolean stopRequested;
+    private volatile boolean choreographyRunning = false;
 
     /**
      * Erstellt eine neue ChoreographyManager-Instanz
@@ -24,19 +22,27 @@ public class ChoreographyManager implements Runnable {
      * @param choreography Die Choreography die abgespielt werden soll
      */
     public ChoreographyManager(Kugelmatik kugelmatik, int targetFPS, IChoreography choreography) {
+        if (kugelmatik == null)
+            throw new IllegalArgumentException("kugelmatik is null");
         if (targetFPS <= 0)
-            throw new InvalidParameterException("targetFPS is out of range");
+            throw new IllegalArgumentException("targetFPS is out of range");
+        if (choreography == null)
+            throw new IllegalArgumentException("choreography is null");
 
-        this.choreography = choreography;
         this.kugelmatik = kugelmatik;
         this.targetFPS = targetFPS;
-        thread = new Thread(this);
+        this.choreography = choreography;
+
+        thread = new Thread(this, "ChoreographyThread");
     }
 
     /**
      * Startet die Choreography
      */
-    public void Start() {
+    public void start() {
+        if (choreographyRunning)
+            return;
+
         stopRequested = false;
         thread.start();
     }
@@ -44,16 +50,17 @@ public class ChoreographyManager implements Runnable {
     /**
      * Zeigt den ersten Frame der Choreography
      */
-    public void StartOnlyFirstFrame() {
-        stopRequested = true;
-        thread.start();
+    public void showFirstFrame() {
+        setSteppers(0);
+        kugelmatik.sendMovementData(true, true);
     }
 
     /**
      * Hält die Choreography an
      */
-    public void Stop() {
-        stopRequested = true;
+    public void stop() {
+        if (choreographyRunning)
+            stopRequested = true;
     }
 
     /**
@@ -78,9 +85,8 @@ public class ChoreographyManager implements Runnable {
 
     @Override
     public void run() {
-        setSteppers(0);
+        showFirstFrame();
 
-        kugelmatik.sendMovementData(true);
         while (kugelmatik.isAnyPacketPending()) {
             sleep(500);
             kugelmatik.resendPackets();
@@ -94,11 +100,11 @@ public class ChoreographyManager implements Runnable {
 
         while (!stopRequested) {
             long frameStartTime = System.currentTimeMillis();
-            long timeRunning = System.currentTimeMillis() - startTime;
+            long timeRunning = frameStartTime - startTime;
 
             setSteppers(timeRunning);
 
-            if (timeRunning % 200 == 0)
+            if (ticksRunning % 200 == 0)
                 kugelmatik.sendMovementData(false, true);
             else
                 kugelmatik.sendMovementData();
@@ -106,15 +112,17 @@ public class ChoreographyManager implements Runnable {
             if (ticksRunning % 10 == 0)
                 kugelmatik.sendPing();
 
-            int sleepTime = (int) (1000f / targetFPS) - (int) (System.currentTimeMillis() - frameStartTime); // berechnen wie lange der Thread schlafen soll um die TargetFPS zu erreichen
+            long frameTime = System.currentTimeMillis() - frameStartTime;
+            long sleepTime = (long) (1000f / targetFPS) - frameTime; // berechnen wie lange der Thread schlafen soll um die TargetFPS zu erreichen
             if (sleepTime > 0)
                 sleep(sleepTime);
 
-            fps = (int) Math.ceil(1000f / (int) (System.currentTimeMillis() - frameStartTime));
+            fps = (int) Math.ceil(1000f / frameTime);
             ticksRunning++;
 
         }
         choreographyRunning = false;
+        stopRequested = false;
     }
 
     private void sleep(long timeout) {

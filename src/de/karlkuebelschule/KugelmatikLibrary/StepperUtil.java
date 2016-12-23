@@ -7,12 +7,14 @@ import java.util.Arrays;
  */
 public class StepperUtil {
     /**
-     * Überprüft ob alle Stepper die selbe H�he und waitTime haben
+     * Überprüft ob alle Stepper die gleiceh Höhe und WaitTime haben
      *
      * @param steppers Die zu überprüfenden Stepper
      * @return True wenn gleich, False wenn ungleich
      */
     public static boolean allSteppersSameValues(Stepper[] steppers) {
+        if (steppers == null)
+            throw new IllegalArgumentException("steppers is null");
         if (steppers.length <= 1)
             return true;
 

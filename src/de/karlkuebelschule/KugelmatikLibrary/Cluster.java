@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,10 +48,12 @@ public class Cluster {
      * @param y          Die y-Koordinate der Position der Clusters in der kugelmatik
      */
     public Cluster(Kugelmatik kugelmatik, InetAddress address, int x, int y) {
+        if (kugelmatik == null)
+            throw new IllegalArgumentException("kugelmatik is null");
         if (x < 0)
-            throw new IllegalArgumentException("The argument 'x' is out of range.");
+            throw new IllegalArgumentException("x is out of range");
         if (y < 0)
-            throw new IllegalArgumentException("The argument 'y' is out of range.");
+            throw new IllegalArgumentException("y is out of range");
 
 
         packetsToAcknowledge = new HashMap<>();
@@ -171,6 +172,9 @@ public class Cluster {
      * @return Gibt zurück ob ein Packet gesendet wurde
      */
     protected boolean sendPacketInternal(Packet packet, boolean guaranteed, int revision) {
+        if (packet == null)
+            throw new IllegalArgumentException("packet is null");
+
         // bei keiner Verbindung Paket ignorieren
         if (socket == null)
             return false;
@@ -404,6 +408,7 @@ public class Cluster {
 
             PacketType type = PacketType.values()[input.read() - 1];
             int revision = BinaryHelper.flipByteOrder(input.readInt());
+
             acknowledge(revision);
 
             kugelmatik.getLog().verbose(getUserfriendlyName() + ": Packet " + type.name() + " | Length: " + packet.getLength() + " | Revision: " + revision);
@@ -566,8 +571,8 @@ public class Cluster {
      * @return Der Stepper an der Stelle index
      */
     public Stepper getStepperByIndex(int index) {
-        if (index >= steppers.length)
-            throw new InvalidParameterException("index is out of range");
+        if (index < 0 || index >= steppers.length)
+            throw new IllegalArgumentException("index is out of range");
 
         return steppers[index];
     }

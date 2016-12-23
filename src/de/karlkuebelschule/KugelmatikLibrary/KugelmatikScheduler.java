@@ -16,6 +16,9 @@ public class KugelmatikScheduler {
      * @param kugelmatik Die Kugelmatik für welche die Aktionen ausgeführt werden sollen
      */
     public KugelmatikScheduler(Kugelmatik kugelmatik) {
+        if (kugelmatik == null)
+            throw new IllegalArgumentException("kugelmatik is null");
+
         this.kugelmatik = kugelmatik;
         timer = new Timer();
     }

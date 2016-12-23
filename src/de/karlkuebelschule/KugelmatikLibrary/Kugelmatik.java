@@ -16,11 +16,17 @@ public class Kugelmatik {
     }
 
     public Kugelmatik(IAddressProvider addressProvider, Log log) throws SocketException {
+        if (addressProvider == null)
+            throw new IllegalArgumentException("addressProvider is null");
+        if (log == null)
+            throw new IllegalArgumentException("log is null");
+
         this.log = log;
         clusters = new Cluster[Config.KugelmatikHeight * Config.KugelmatikWidth];
 
         getLog().info("Kugelmatik Library in Java... Version %d", VERSION);
         getLog().verbose("Creating clusters with address provider " + addressProvider.getClass().getSimpleName());
+
         for (int x = 0; x < Config.KugelmatikWidth; x++)
             for (int y = 0; y < Config.KugelmatikHeight; y++)
                 clusters[y * Config.KugelmatikWidth + x] = new Cluster(this, addressProvider.getAddress(x, y), x, y);
@@ -188,7 +194,7 @@ public class Kugelmatik {
      * Gibt einen Array mit allen Clustern zurück
      */
     public Cluster[] getAllCluster() {
-        return clusters;
+        return clusters.clone();
     }
 
     /**
