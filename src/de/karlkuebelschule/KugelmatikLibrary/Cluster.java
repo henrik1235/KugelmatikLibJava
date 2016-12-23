@@ -427,25 +427,10 @@ public class Cluster {
                 case Info:
                     byte buildVersion = input.readByte();
 
-                    BusyCommand currentBusyCommand = BusyCommand.None;
-                    if (buildVersion >= 11)
-                        currentBusyCommand = BusyCommand.values()[input.readByte()];
-                    else if (buildVersion >= 8)
-                        currentBusyCommand = input.read() > 0 ? BusyCommand.Unknown : BusyCommand.None;
-
-                    int highestRevision = 0;
-                    if (buildVersion >= 9)
-                        highestRevision = BinaryHelper.flipByteOrder(input.readInt());
-
-                    ErrorCode lastErrorCode = ErrorCode.None;
-                    if (buildVersion >= 12)
-                        lastErrorCode = ErrorCode.getCode(input.readByte());
-
-                    short val = input.readShort();
-
-                    int freeRam = -1;
-                    if (buildVersion >= 14)
-                        freeRam = BinaryHelper.flipByteOrder(val);
+                    BusyCommand currentBusyCommand = BusyCommand.getCommand(input.readByte());
+                    int highestRevision = BinaryHelper.flipByteOrder(input.readInt());
+                    ErrorCode lastErrorCode = ErrorCode.getCode(input.readByte());
+                    int freeRam = BinaryHelper.flipByteOrder(input.readShort());
 
                     ClusterConfig config;
                     try {

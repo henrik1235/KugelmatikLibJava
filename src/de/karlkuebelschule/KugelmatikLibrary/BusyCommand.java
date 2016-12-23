@@ -20,4 +20,11 @@ public enum BusyCommand {
     public byte getValue() {
         return value;
     }
+
+    public static BusyCommand getCommand(byte value) {
+        for (BusyCommand code : BusyCommand.values())
+            if (code.getValue() == value)
+                return code;
+        return BusyCommand.Unknown;
+    }
 }
