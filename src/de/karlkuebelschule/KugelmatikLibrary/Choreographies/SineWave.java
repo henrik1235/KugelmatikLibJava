@@ -40,7 +40,7 @@ public class SineWave implements IChoreography {
         sinWave += 1; // in den Bereich [0, 2] verschieben
         sinWave /= 2; // normalisieren
 
-        return (int) (sinWave * Config.MaxHeight);
+        return (int) Math.round(sinWave * Config.MaxHeight);
     }
 
 }
