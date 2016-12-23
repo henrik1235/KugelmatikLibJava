@@ -9,41 +9,43 @@ public class BinaryHelper {
         return (byte) ((x << 4) | y);
     }
 
-    private static int getIntFromByteArray(byte[] bytes) {
-        return bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3];
+    private static int getIntFromArray(long[] bytes) {
+        return (int)(bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3]);
     }
 
-    private static long getLongFromByteArray(byte[] bytes) {
+    private static long getLongFromArray(long[] bytes) {
         long high = (long) bytes[0] << 54 | (long) bytes[1] << 48 | (long) bytes[2] << 40 | (long) bytes[3] << 32;
         long low = bytes[4] << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7];
         return high | low;
     }
 
     public static int flipByteOrder(int val) {
-        byte[] bytes = {
-                ((byte) val),
-                (byte) (val >> 8),
-                (byte) (val >> 16),
-                (byte) (val >> 24),
+        long[] bytes = {
+                val & 0xFF,
+                (val >>> 8) & 0xFF,
+                (val >>> 16) & 0xFF,
+                (val >>> 24) & 0xFF
         };
-        return getIntFromByteArray(bytes);
+        return getIntFromArray(bytes);
     }
 
     public static short flipByteOrder(short val) {
-        return (short) ((val & 0xFF) << 8 | (val) >> 8);
+        int low = (val & 0xFF00) >>> 8;
+        int high = (val & 0xFF) << 8;
+        return (short)(low | high);
     }
 
     public static long flipByteOrder(long val) {
-        byte[] bytes = {
-                ((byte) val),
-                (byte) (val >> 8),
-                (byte) (val >> 16),
-                (byte) (val >> 24),
-                (byte) (val >> 32),
-                (byte) (val >> 40),
-                (byte) (val >> 48),
-                (byte) (val >> 56),
+        long[] bytes = {
+                val & 0xFF,
+                (val >>> 8) & 0xFF,
+                (val >>> 16) & 0xFF,
+                (val >>> 24) & 0xFF,
+                (val >>> 32) & 0xFF,
+                (val >>> 40) & 0xFF,
+                (val >>> 48) & 0xFF,
+                (val >>> 56) & 0xFF
         };
-        return getLongFromByteArray(bytes);
+        return getLongFromArray(bytes);
     }
 }

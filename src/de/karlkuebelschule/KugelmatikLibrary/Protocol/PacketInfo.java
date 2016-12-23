@@ -5,7 +5,13 @@ import java.nio.ByteBuffer;
 /**
  * Befehl um die Konfiguration vom Cluster abzurufen.
  */
-public class GetClusterInfo extends Packet {
+public class PacketInfo extends Packet {
+    private boolean requestConfig2;
+
+    public PacketInfo(boolean requestConfig2) {
+        this.requestConfig2 = requestConfig2;
+    }
+
     @Override
     public PacketType getType() {
         return PacketType.Info;
@@ -13,11 +19,11 @@ public class GetClusterInfo extends Packet {
 
     @Override
     public int getDataSize() {
-        return 0;
+        return 1;
     }
 
     @Override
     protected void allocateBuffer(ByteBuffer buffer) {
-
+        buffer.put((byte)(requestConfig2 ? 1 : 0));
     }
 }

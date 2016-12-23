@@ -10,14 +10,28 @@ public class ClusterInfo {
     private ClusterConfig config;
     private ErrorCode lastErrorCode;
     private int freeRam;
+    private int mcpStatus;
+    private int loopTime;
+    private int networkTime;
+    private int maxNetworkTime;
+    private int stepperTime;
+    private int uptime;
 
-    public ClusterInfo(byte buildVersion, BusyCommand currentBusyCommand, int highestRevision, ClusterConfig config, ErrorCode lastErrorCode, int freeRam) {
+    public ClusterInfo(byte buildVersion, BusyCommand currentBusyCommand, int highestRevision,
+                       ClusterConfig config, ErrorCode lastErrorCode, int freeRam, int mcpStatus,
+                       int loopTime, int networkTime, int maxNetworkTime, int stepperTime, int uptime) {
         this.buildVersion = buildVersion;
         this.currentBusyCommand = currentBusyCommand;
         this.highestRevision = highestRevision;
         this.config = config;
         this.lastErrorCode = lastErrorCode;
         this.freeRam = freeRam;
+        this.mcpStatus = mcpStatus;
+        this.loopTime = loopTime;
+        this.networkTime = networkTime;
+        this.maxNetworkTime = maxNetworkTime;
+        this.stepperTime = stepperTime;
+        this.uptime = uptime;
     }
 
     /**
@@ -60,5 +74,25 @@ public class ClusterInfo {
      */
     public int getFreeRam() {
         return freeRam;
+    }
+
+    public int getLoopTime() {
+        return loopTime;
+    }
+
+    public int getNetworkTime() {
+        return networkTime;
+    }
+
+    public int getMaxNetworkTime() {
+        return maxNetworkTime;
+    }
+
+    public int getStepperTime() {
+        return stepperTime;
+    }
+
+    public int getUptime() {
+        return uptime;
     }
 }

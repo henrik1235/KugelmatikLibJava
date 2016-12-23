@@ -1,23 +1,21 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
-import com.sun.istack.internal.NotNull;
-
 import java.net.SocketException;
 
 /**
  * Repräsentiert eine Kugelmatik
  */
 public class Kugelmatik {
-    public static final int VERSION = 15;
+    public static final int VERSION = 17;
 
     private Cluster[] clusters;
     private Log log;
 
-    public Kugelmatik(@NotNull IAddressProvider addressProvider) throws SocketException {
+    public Kugelmatik(IAddressProvider addressProvider) throws SocketException {
         this(addressProvider, new Log(LogLevel.Debug));
     }
 
-    public Kugelmatik(@NotNull IAddressProvider addressProvider, Log log) throws SocketException {
+    public Kugelmatik(IAddressProvider addressProvider, Log log) throws SocketException {
         this.log = log;
         clusters = new Cluster[Config.KugelmatikHeight * Config.KugelmatikWidth];
 

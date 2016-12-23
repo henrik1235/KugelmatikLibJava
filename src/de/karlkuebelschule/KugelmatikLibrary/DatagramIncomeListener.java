@@ -1,7 +1,6 @@
 package de.karlkuebelschule.KugelmatikLibrary;
 
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
@@ -47,18 +46,16 @@ public class DatagramIncomeListener implements Runnable {
 
     @Override
     public void run() {
+        byte[] buffer = new byte[Config.ReceiveBufferLength];
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+
         while (true) {
-            byte[] buf = new byte[Config.ReceiveBufferLength];
-            DatagramPacket packet = new DatagramPacket(buf, buf.length);
             try {
                 socket.receive(packet);
-            } catch (IOException e) {
+                cluster.onReceive(packet);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            byte[] data = new byte[packet.getLength()];
-            System.arraycopy(packet.getData(), packet.getOffset(), data, 0, packet.getLength());
-            packet.setData(data);
-            cluster.onReceive(packet);
         }
     }
 }

@@ -11,7 +11,7 @@ public class Program {
             log.info("KugelmatikTest running...");
             log.info("=========================");
 
-            InetAddress clusterAddress = InetAddress.getByName("192.168.178.22");
+            InetAddress clusterAddress = InetAddress.getByName("192.168.178.40");
             log.info("Connecting to %s", clusterAddress.toString());
 
             // Config setzen
@@ -22,6 +22,9 @@ public class Program {
             Cluster cluster = kugelmatik.getClusterByPosition(0, 0);
 
             log.info("Waiting for connection...");
+
+            cluster.resetRevision();
+
             while (!cluster.isConnected()) {
                 cluster.sendPing();
                 sleep(500);
@@ -60,6 +63,13 @@ public class Program {
             for (int x = 0; x < kugelmatik.getStepperWidth(); x++)
                 for (int y = 0; y < kugelmatik.getStepperHeight(); y++)
                     kugelmatik.setStepper(x, y, x * 100 + x);
+            kugelmatik.sendMovementData();
+
+            sleep(5000);
+
+            log.info("Move all steppers to 0");
+
+            kugelmatik.setAllSteppers(0);
             kugelmatik.sendMovementData();
 
             log.info("========================================================");

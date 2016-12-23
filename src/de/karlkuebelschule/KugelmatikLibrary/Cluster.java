@@ -32,7 +32,7 @@ public class Cluster {
     private ClusterInfo clusterInfo;
     private Stepper[] steppers;
 
-    private int currentRevision = 0;
+    private int currentRevision = 1;
     private long lastSuccessfulPingTime = -1;
     private int ping = -1;
 
@@ -77,7 +77,7 @@ public class Cluster {
                 incomeListener = new DatagramIncomeListener(this, socket, "listen_" + x + "_" + y);
                 incomeListener.listen();
             } catch (IOException e) {
-                this.kugelmatik.getLog().error("Error while creating socket for cluster [%s] with ip %s", getID(), address.getHostAddress());
+                this.kugelmatik.getLog().error("Error while creating socket for %s with ip %s", getUserfriendlyName(), address.getHostAddress());
                 e.printStackTrace();
             }
 
@@ -89,7 +89,7 @@ public class Cluster {
      * Wird aufgerufen, wenn eine Verbindung hergestellt wurde.
      */
     private void onConnected() {
-        kugelmatik.getLog().debug("Cluster [%s, address = %s] onConnected()", getID(), socket.getInetAddress().toString());
+        kugelmatik.getLog().debug("%s [address = %s] onConnected()", getUserfriendlyName(), socket.getInetAddress().toString());
 
         packetsToAcknowledge.clear();
         packetsSentTimes.clear();
@@ -194,9 +194,9 @@ public class Cluster {
         if (packet.getType().doesClusterAnswer())
             guaranteed = false;
 
-        DatagramPacket datagramPacket = packet.getPacket(guaranteed, currentRevision);
         try {
-            kugelmatik.getLog().verbose("%s: Sent %s with rev %d", getID(), packet.getClass().getSimpleName(), revision);
+            DatagramPacket datagramPacket = packet.getPacket(guaranteed, currentRevision);
+            kugelmatik.getLog().verbose("%s: Sent %s with rev %d", getUserfriendlyName(), packet.getType().name(), revision);
             socket.send(datagramPacket);
 
             return true;
@@ -301,7 +301,7 @@ public class Cluster {
      */
     public void resetRevision() {
         sendPacket(new ResetRevision());
-        currentRevision = 0;
+        currentRevision = 1;
     }
 
     /**
@@ -382,7 +382,7 @@ public class Cluster {
      * Ruft die Konfiguration des Clusters ab
      */
     public void sendGetClusterConfig() {
-        sendPacket(new GetClusterInfo());
+        sendPacket(new PacketInfo(true));
     }
 
     /**
@@ -395,8 +395,7 @@ public class Cluster {
             return;
 
         byte[] data = packet.getData();
-
-        if (data.length < Packet.HeadSize || data[0] != 'K' || data[1] != 'K' || data[2] != 'S')
+        if (packet.getLength() < Packet.HeadSize || data[0] != 'K' || data[1] != 'K' || data[2] != 'S')
             return;
 
         DataInputStream input = new DataInputStream(new ByteArrayInputStream(data));
@@ -407,11 +406,10 @@ public class Cluster {
             int revision = BinaryHelper.flipByteOrder(input.readInt());
             acknowledge(revision);
 
-            String verbose = "Got packet | Length: " + data.length + " | Revision: " + revision + " | ";
+            kugelmatik.getLog().verbose(getUserfriendlyName() + ": Packet " + type.name() + " | Length: " + packet.getLength() + " | Revision: " + revision);
             switch (type) {
                 case Ping:
-                    verbose += "Ping";
-                    if (data.length - Packet.HeadSize != Long.BYTES)
+                    if (packet.getLength() - Packet.HeadSize != Long.BYTES)
                         break;
 
                     boolean wasNotConnected = !checkConnection();
@@ -424,10 +422,9 @@ public class Cluster {
                         onConnected();
                     break;
                 case Ack:
-                    verbose += "Ack";
+                    // ignore
                     break;
                 case Info:
-                    verbose += "Config";
                     byte buildVersion = input.readByte();
 
                     BusyCommand currentBusyCommand = BusyCommand.None;
@@ -440,27 +437,50 @@ public class Cluster {
                     if (buildVersion >= 9)
                         highestRevision = BinaryHelper.flipByteOrder(input.readInt());
 
-                    byte stepMode = (byte) input.read();
-
-                    int delayTime = BinaryHelper.flipByteOrder(input.readInt());
-
-                    boolean useBreak = false;
-                    if (buildVersion >= 6)
-                        useBreak = input.read() > 0;
-
                     ErrorCode lastErrorCode = ErrorCode.None;
                     if (buildVersion >= 12)
                         lastErrorCode = ErrorCode.getCode(input.readByte());
 
+                    short val = input.readShort();
+
                     int freeRam = -1;
                     if (buildVersion >= 14)
-                        freeRam = BinaryHelper.flipByteOrder(input.readShort()); // in Wirklichkeit unsigned short
+                        freeRam = BinaryHelper.flipByteOrder(val);
 
-                    clusterInfo = new ClusterInfo(buildVersion, currentBusyCommand, highestRevision,
-                            new ClusterConfig(StepMode.values()[stepMode - 1], delayTime, useBreak), lastErrorCode, freeRam);
+                    ClusterConfig config;
+                    try {
+                        config = new ClusterConfig(input);
+                    }
+                    catch(IOException e) {
+                        e.printStackTrace();
+
+                        config = new ClusterConfig();
+                    }
+
+                    int mcpStatus = 0;
+                    int loopTime = 0;
+                    int networkTime = 0;
+                    int maxNetworkTime = 0;
+                    int stepperTime = 0;
+                    int upTime = 0;
+
+                    if (buildVersion >= 17)
+                    {
+                        mcpStatus = input.readUnsignedByte();
+                        loopTime = BinaryHelper.flipByteOrder(input.readInt());
+                        networkTime = BinaryHelper.flipByteOrder(input.readInt());
+                        maxNetworkTime = BinaryHelper.flipByteOrder(input.readInt());
+                        stepperTime = BinaryHelper.flipByteOrder(input.readInt());
+                        upTime = BinaryHelper.flipByteOrder(input.readInt());
+                    }
+
+                    clusterInfo = new ClusterInfo(buildVersion, currentBusyCommand, highestRevision, config,
+                            lastErrorCode, freeRam, mcpStatus,
+                            loopTime, networkTime, maxNetworkTime, stepperTime,
+                            upTime);
+
                     break;
                 case GetData:
-                    verbose += "StepperData";
                     for (byte x = 0; x < Width; x++) // for-Schleife muss mit Firmware übereinstimmen
                         for (byte y = 0; y < Height; y++) {
                             Stepper stepper = getStepperByPosition(x, y);
@@ -477,8 +497,6 @@ public class Cluster {
                     break;
 
             }
-            kugelmatik.getLog().verbose(getID() + ": " + verbose);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -584,9 +602,9 @@ public class Cluster {
     }
 
     /**
-     * Gibt eine ID anhand der Position zurück
+     * Gibt einen benutzerfreundlichen Namen zurück.
      */
-    public String getID() {
-        return String.format("cluster_%d_%d", x + 1, y + 1);
+    public String getUserfriendlyName() {
+        return String.format("Cluster [%d, %d]", x + 1, y + 1);
     }
 }

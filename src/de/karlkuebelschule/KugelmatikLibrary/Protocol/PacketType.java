@@ -29,7 +29,10 @@ public enum PacketType {
     BlinkGreen((byte) 17),
     BlinkRed((byte) 18),
 
-    Stop((byte) 19);
+    Stop((byte) 19),
+
+    SetData((byte)20),
+    Config2((byte)21);
 
     private byte numVal;
 

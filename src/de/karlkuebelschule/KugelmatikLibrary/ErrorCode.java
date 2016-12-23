@@ -19,14 +19,15 @@ public enum ErrorCode {
     PacketSizeBufferOverflow(12),
 
     McpFault1(13),
-    McpFault2(13),
-    McpFault3(14),
-    McpFault4(15),
-    McpFault5(16),
-    McpFault6(17),
-    McpFault7(18),
-    McpFault8(19),
+    McpFault2(14),
+    McpFault3(15),
+    McpFault4(16),
+    McpFault5(17),
+    McpFault6(18),
+    McpFault7(19),
+    McpFault8(20),
 
+    InternalDefaultConfigFault(254),
     Internal(255),
     UnknownError(Integer.MAX_VALUE);
 
