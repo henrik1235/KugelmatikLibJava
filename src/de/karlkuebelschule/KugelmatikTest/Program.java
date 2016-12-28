@@ -25,7 +25,7 @@ public class Program {
 
             cluster.resetRevision();
 
-            while (!cluster.isConnected()) {
+            while (!cluster.checkConnection()) {
                 cluster.sendPing();
                 sleep(500);
             }
