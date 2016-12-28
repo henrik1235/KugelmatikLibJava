@@ -129,9 +129,9 @@ public class Cluster {
     }
 
     /**
-     * Sendet alle noch austehende Packets deren Sendezeit mehr als MinimumResendTimeout zurück liegt
+     * Sendet alle noch austehende Pakete deren Sendezeit mehr als MinimumResendTimeout zurück liegt
      *
-     * @return True wenn Packets gesendet wurden
+     * @return True wenn Pakete gesendet wurden
      */
     public boolean resendPackets() {
         boolean anyPacketsSend = false;
@@ -163,7 +163,7 @@ public class Cluster {
     }
 
     /**
-     * Interne Methode zum senden eines Packets
+     * Interne Methode zum Senden eines Packets
      *
      * @param packet     Das Packet das gesendet werden soll
      * @param guaranteed Bei true mit Garantie, bei false ohne Garantie
@@ -187,6 +187,8 @@ public class Cluster {
                 return false;
         }
 
+        // Pakete die Guaranteed sind speichern damit sie evtl. erneut gesendet werden können
+        // siehe resendPackets()
         if (guaranteed) {
             packetsToAcknowledge.put(currentRevision, packet);
             packetsSentTimes.put(currentRevision, System.currentTimeMillis());
@@ -289,7 +291,7 @@ public class Cluster {
         // wenn die Anzahl der Stepper zu groß ist, dann
         // ist es uneffizent die Position für jeden Stepper zu senden
         if (changedSteppers.length < 6) {
-            // prüfen ob alle geänderte Stepper die gleicehn Werte
+            // prüfen ob alle geänderten Stepper die gleichen Werte haben
             boolean allChangedSameValues = StepperUtil.allSteppersSameValues(changedSteppers);
 
             if (allChangedSameValues) // wenn ja, dann müssen wir nur die Positionen der geänderten Stepper senden
