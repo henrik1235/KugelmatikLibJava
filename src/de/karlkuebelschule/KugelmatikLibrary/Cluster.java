@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -261,42 +260,45 @@ public class Cluster {
      * @return Gibt zurück ob Packets gesendet wurden
      */
     protected boolean sendMovementDataInternal(boolean guaranteed, boolean sendAllSteppers) {
+        // kein Stepper hat sich geändert und wir sollen nicht alle Stepper senden
         if (!hasStepperChanged() && !sendAllSteppers)
             return false;
 
+        // geänderte Stepper filtern
         Stepper[] changedSteppers;
-
         if (sendAllSteppers)
             changedSteppers = steppers;
         else
-            changedSteppers = Arrays.stream(steppers).filter(Stepper::hasDataChanged).toArray(Stepper[]::new);
+            changedSteppers = StepperUtil.getAllChangedSteppers(steppers);
 
+        // keine Stepper haben sich geändert
         if (changedSteppers.length == 0)
             return false;
 
+        // nur ein Stepper hat sich geändert
         if (changedSteppers.length == 1) {
+            // MoveStepper bewegt nur einen Stepper (X, Y)
             Stepper stepper = changedSteppers[0];
             return sendPacket(new MoveStepper(stepper.getX(), stepper.getY(), stepper.getHeight(), stepper.getWaitTime()), guaranteed);
         }
 
-        boolean allSteppersSameValues = StepperUtil.allSteppersSameValues(steppers);
-
-        if (allSteppersSameValues)
+        // wenn alle Stepper (auch die ungeänderten) auf den gleichen Werten sind
+        if (StepperUtil.allSteppersSameValues(steppers))
             return sendPacket(new MoveAllSteppers(steppers[0].getHeight(), steppers[0].getWaitTime()), guaranteed);
 
-        // TODO detect rectangles
-
         // wenn die Anzahl der Stepper zu groß ist, dann
-        // ist es uneffizent die Position für jeden Stepper mitzuschicken
-        if (changedSteppers.length < 8) {
+        // ist es uneffizent die Position für jeden Stepper zu senden
+        if (changedSteppers.length < 6) {
+            // prüfen ob alle geänderte Stepper die gleicehn Werte
             boolean allChangedSameValues = StepperUtil.allSteppersSameValues(changedSteppers);
 
-            if (allChangedSameValues)
+            if (allChangedSameValues) // wenn ja, dann müssen wir nur die Positionen der geänderten Stepper senden
                 return sendPacket(new MoveSteppers(changedSteppers, changedSteppers[0].getHeight(), changedSteppers[0].getWaitTime()), guaranteed);
-            else
+            else // wenn nicht, dann müssen wir alle Daten (Position, Höhe und WaitTime) senden
                 return sendPacket(new MoveSteppersArray(changedSteppers), guaranteed);
         }
 
+        // für alle Stepper (auch ungeänderte) alle Daten senden in einem kompakten Format
         return sendPacket(new MoveAllSteppersArray(this), guaranteed);
     }
 
