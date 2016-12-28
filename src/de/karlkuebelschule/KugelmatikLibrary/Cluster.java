@@ -332,7 +332,11 @@ public class Cluster {
         sendPacket(new Ping(System.currentTimeMillis()));
     }
 
-    public boolean isConnected() {
+    /***
+     * Gibt einen Wert zurück welcher angibt, ob noch eine Verbindung mit dem Cluster besteht.
+     * @return
+     */
+    private boolean isConnected() {
         return ping >= 0;
     }
 
@@ -350,7 +354,7 @@ public class Cluster {
         sendPacket(new Home(), true);
 
         for (Stepper stepper : steppers)
-            stepper.setHeight(0);
+            stepper.reset();
     }
 
     /**
@@ -406,19 +410,24 @@ public class Cluster {
 
         DataInputStream input = new DataInputStream(new ByteArrayInputStream(data));
         try {
+            // ersten 4 Bytes überspringen ("KKS" und guaranteed Flag)
             input.skip(4);
 
             PacketType type = PacketType.values()[input.read() - 1];
             int revision = BinaryHelper.flipByteOrder(input.readInt());
 
+            // Paket bestätigen
             acknowledge(revision);
 
             kugelmatik.getLog().verbose(getUserfriendlyName() + ": Packet " + type.name() + " | Length: " + packet.getLength() + " | Revision: " + revision);
             switch (type) {
                 case Ping:
+                    // wir senden ein Ping Paket an das Cluster mit der Systemzeit von uns
+                    // das Cluster sendet das Paket mit dem gleichen Inhalt wieder zurück
                     if (packet.getLength() - Packet.HeadSize != Long.BYTES)
                         break;
 
+                    // mithilfe dieser Zeit können wir die Laufzeit berechnen
                     boolean wasNotConnected = !checkConnection();
                     lastSuccessfulPingTime = System.currentTimeMillis();
 
