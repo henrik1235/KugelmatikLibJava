@@ -434,7 +434,12 @@ public class Cluster {
                     lastSuccessfulPingTime = System.currentTimeMillis();
 
                     long sendTime = input.readLong();
-                    setPing((int) (System.currentTimeMillis() - sendTime));
+                    if (System.currentTimeMillis() < sendTime) {
+                        setPing(0);
+                        kugelmatik.getLog().error(getUserfriendlyName() + ": Invalid ping time: %d", sendTime);
+                    }
+                    else
+                        setPing((int) (System.currentTimeMillis() - sendTime));
 
                     if (!wasNotConnected)
                         onConnected();
