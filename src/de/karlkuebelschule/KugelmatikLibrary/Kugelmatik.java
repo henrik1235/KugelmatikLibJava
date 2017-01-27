@@ -198,6 +198,17 @@ public class Kugelmatik {
     }
 
     /**
+     * Prüft ob eine Verbindung zu irgendeinem Cluster besteht.
+     * @return True, wenn eine Verbindung einem Cluster besteht.
+     */
+    public boolean isAnyClusterOnline() {
+        for (Cluster cluster : clusters)
+            if (cluster.checkConnection())
+                return true;
+        return false;
+    }
+
+    /**
      * Gibt das Log-Objekt der Kugelmatik zurück
      */
     public Log getLog() {
