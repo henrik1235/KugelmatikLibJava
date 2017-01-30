@@ -29,27 +29,41 @@ public abstract class SimpleKugelmatik {
         log.info("====================");
 
         log.info("Running setup()...");
-        setup();
+        try {
+            setup();
 
-        if (kugelmatik == null)
-            log.error("No Kugelmatik loaded. Use useOnCluster(), useClusters() or useKugelmatik() to load any clusters.");
-        else if (!kugelmatik.isAnyClusterOnline())
-            log.error("Not connected to any cluster!");
-        else {
-            log.info("====================");
-            log.info("Running loop()...");
+            if (kugelmatik == null)
+                log.error("No Kugelmatik loaded. Use useOnCluster(), useClusters() or useKugelmatik() to load any clusters.");
+            else if (!kugelmatik.isAnyClusterOnline())
+                log.error("Not connected to any cluster!");
+            else {
+                log.info("====================");
+                log.info("Running loop()...");
 
-            final long frameTime = 16;
-            while (true) {
-                long time = System.currentTimeMillis();
+                try {
+                    final long frameTime = 16;
+                    while (true) {
+                        long time = System.currentTimeMillis();
 
-                loop();
-                tick();
+                        loop();
+                        tick();
 
-                if (System.currentTimeMillis() - time < frameTime)
-                    sleep(frameTime);
+                        if (System.currentTimeMillis() - time < frameTime)
+                            sleep(frameTime);
+                    }
+                } catch (Exception e) {
+                    log.error("Exception while running loop():");
+                    e.printStackTrace();
+                }
             }
         }
+        catch(Exception e) {
+            log.error("Exception while running setup():");
+            e.printStackTrace();
+        }
+
+        if (kugelmatik != null)
+            kugelmatik.free();
     }
 
     /**
