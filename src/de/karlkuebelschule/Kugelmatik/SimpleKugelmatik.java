@@ -219,6 +219,26 @@ public abstract class SimpleKugelmatik {
     }
 
     /**
+     * Gibt die Anzahl der Kugeln in der Breite (X Richtung) zurück.
+     * @return Die Anzahl der Kugeln in der Breite (X Richtung).
+     */
+    public int getWidth() {
+        if (kugelmatik == null)
+            return 0;
+        return kugelmatik.getStepperWidth();
+    }
+
+    /**
+     * Gibt die Anzahl der Kugeln in der Länge (Y Richtung) zurück.
+     * @return Die Anzahl der Kugeln in der Länge (Y Richtung).
+     */
+    public int getHeight() {
+        if (kugelmatik == null)
+            return 0;
+        return kugelmatik.getStepperHeight();
+    }
+
+    /**
      * Gibt die Höhe der Kugel an der Position (x, y) zurück.
      * @param x Die absolute Position in der Breite.
      * @param y Die absolute Position in der Höhe.
