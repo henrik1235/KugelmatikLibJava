@@ -86,6 +86,16 @@ public class Cluster {
     }
 
     /**
+     * Gibt alle Ressourcen frei und schließt die Verbindung zum Cluster.
+     */
+    public void free() {
+        if (socket != null)
+            socket.close();
+        if (incomeListener != null)
+            incomeListener.free();
+    }
+
+    /**
      * Wird aufgerufen, wenn eine Verbindung hergestellt wurde.
      */
     private void onConnected() {

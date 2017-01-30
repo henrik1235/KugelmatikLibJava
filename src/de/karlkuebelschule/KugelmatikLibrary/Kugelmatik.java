@@ -33,6 +33,16 @@ public class Kugelmatik {
     }
 
     /**
+     * Gibt alle Ressourcen frei und schließt die Verbindung zu allen Clustern.
+     */
+    public void free() {
+        log.info("Kugelmatik.free(): Closing connections...");
+        if (clusters != null)
+            for (Cluster cluster : clusters)
+                cluster.free();
+    }
+
+    /**
      * Sendet ein Ping an alle Cluster
      */
     public void sendPing() {

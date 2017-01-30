@@ -44,6 +44,14 @@ public class DatagramIncomeListener implements Runnable {
         }
     }
 
+    /**
+     * Beendet den Listener.
+     */
+    public void free() {
+        if (thread != null)
+            thread.stop();
+    }
+
     @Override
     public void run() {
         byte[] buffer = new byte[Config.ReceiveBufferLength];
@@ -51,6 +59,9 @@ public class DatagramIncomeListener implements Runnable {
 
         while (true) {
             try {
+                if (socket.isClosed())
+                    return;
+
                 socket.receive(packet);
                 cluster.onReceive(packet);
             } catch (Exception e) {

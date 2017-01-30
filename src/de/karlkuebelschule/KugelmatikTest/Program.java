@@ -7,6 +7,8 @@ import java.net.InetAddress;
 public class Program {
     public static void main(String[] args) {
         Log log = new Log(LogLevel.Verbose);
+        Kugelmatik kugelmatik = null;
+
         try {
             log.info("KugelmatikTest running...");
             log.info("=========================");
@@ -18,7 +20,7 @@ public class Program {
             Config.KugelmatikWidth = 1;
             Config.KugelmatikHeight = 1;
 
-            Kugelmatik kugelmatik = new Kugelmatik(new StaticAddressProvider(clusterAddress), log);
+            kugelmatik = new Kugelmatik(new StaticAddressProvider(clusterAddress), log);
             Cluster cluster = kugelmatik.getClusterByPosition(0, 0);
 
             log.info("Waiting for connection...");
@@ -74,12 +76,15 @@ public class Program {
 
             log.info("========================================================");
             log.info("Done....");
-
-            sleep(Long.MAX_VALUE);
         } catch (Exception e) {
             log.error("Whoooopps! Internal error while testing:");
             e.printStackTrace();
         }
+
+        if (kugelmatik != null)
+            kugelmatik.free();
+
+        sleep(Long.MAX_VALUE);
     }
 
     private static void sleep(long time) {
