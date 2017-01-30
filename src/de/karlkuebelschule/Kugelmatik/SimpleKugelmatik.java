@@ -201,6 +201,24 @@ public abstract class SimpleKugelmatik {
     }
 
     /**
+     * Gibt die maximale Höhe zurück.
+     * @return Die maximale Höhe (Schrittanzahl) für die Kugeln.
+     */
+    public int getMaxHeight() {
+        return Config.MaxHeight;
+    }
+
+    /**
+     * Setzt die maximale Höhe für die Kugeln.
+     * @param maxHeight Die maximale Höhe (Schrittanzahl) der Kugeln.
+     */
+    public void setMaxHeight(int maxHeight) {
+        if (maxHeight < 0 || maxHeight > Short.MAX_VALUE)
+            throw new IllegalArgumentException("maxHeight is out of range");
+        Config.MaxHeight = (short)maxHeight;
+    }
+
+    /**
      * Gibt die Höhe der Kugel an der Position (x, y) zurück.
      * @param x Die absolute Position in der Breite.
      * @param y Die absolute Position in der Höhe.
@@ -228,6 +246,20 @@ public abstract class SimpleKugelmatik {
         }
 
         kugelmatik.setStepper(x, y, height);
+        tick();
+    }
+
+    /**
+     * Setzt alle Kugeln auf die gleiche Höhe height.
+     * @param height Die Höhe (Schrittanzahl) an die die Kugeln fahren sollen.
+     */
+    public void setAllSteppers(int height) {
+        if (kugelmatik == null) {
+            log.error("setAllStepper(): No Kugelmatik loaded!");
+            return;
+        }
+
+        kugelmatik.setAllSteppers(height);
         tick();
     }
 

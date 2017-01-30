@@ -1,7 +1,6 @@
 package de.karlkuebelschule.Kugelmatik.examples;
 
 import de.karlkuebelschule.Kugelmatik.SimpleKugelmatik;
-import de.karlkuebelschule.KugelmatikLibrary.Config;
 
 public class HelloWorld extends SimpleKugelmatik {
     @Override
@@ -11,6 +10,9 @@ public class HelloWorld extends SimpleKugelmatik {
 
         // ganze Kugelmatik Decke benutzen
         // useKugelmatik();
+
+        // maximale Höhe auf 6000 Schritte setzen
+        setMaxHeight(6000);
     }
 
     @Override
@@ -21,7 +23,7 @@ public class HelloWorld extends SimpleKugelmatik {
         sineWave /= 2; // von [0, 2] auf [0, 1] normalisieren
 
         // Höhe in Schrittanzahl umwandeln
-        int height = (int)Math.round(sineWave * Config.MaxHeight);
+        int height = (int)Math.round(sineWave * getMaxHeight());
 
         // Kugel an 0, 4 setzen
         setStepper(0, 4, height);
