@@ -20,6 +20,13 @@ public abstract class SimpleKugelmatik {
      */
     protected abstract void loop();
 
+    @Override
+    protected void finalize() throws Throwable {
+        if (kugelmatik != null)
+            kugelmatik.free();
+        super.finalize();
+    }
+
     /**
      * Ruft setup() auf und ruft dann wenn eine Verbindung zu einem Cluster besteht loop() in einer Dauerschleife auf.
      */
@@ -317,6 +324,7 @@ public abstract class SimpleKugelmatik {
 
         try {
             Thread.sleep(timeMilliseconds);
+            tick();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -324,7 +332,7 @@ public abstract class SimpleKugelmatik {
 
     /**
      * Prüft ob eine Verbindung zu irgendeinem Cluster besteht.
-     * @return True, wenn eine Verbindung einem Cluster besteht.
+     * @return True, wenn eine Verbindung zu einem Cluster besteht.
      */
     public boolean isAnyClusterOnline() {
         if (kugelmatik == null)

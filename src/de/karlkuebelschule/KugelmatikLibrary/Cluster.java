@@ -85,6 +85,12 @@ public class Cluster {
         }
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        free();
+        super.finalize();
+    }
+
     /**
      * Gibt alle Ressourcen frei und schließt die Verbindung zum Cluster.
      */

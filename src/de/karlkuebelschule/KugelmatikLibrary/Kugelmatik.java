@@ -32,6 +32,12 @@ public class Kugelmatik {
                 clusters[y * Config.KugelmatikWidth + x] = new Cluster(this, addressProvider.getAddress(x, y), x, y);
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        free();
+        super.finalize();
+    }
+
     /**
      * Gibt alle Ressourcen frei und schließt die Verbindung zu allen Clustern.
      */
