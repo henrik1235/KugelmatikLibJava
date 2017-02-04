@@ -446,7 +446,7 @@ public class Cluster {
                         break;
 
                     // mithilfe dieser Zeit können wir die Laufzeit berechnen
-                    boolean wasNotConnected = !checkConnection();
+                    boolean wasConnected = checkConnection();
                     lastSuccessfulPingTime = System.currentTimeMillis();
 
                     long sendTime = input.readLong();
@@ -457,7 +457,7 @@ public class Cluster {
                     else
                         setPing((int) (System.currentTimeMillis() - sendTime));
 
-                    if (!wasNotConnected)
+                    if (!wasConnected)
                         onConnected();
                     break;
                 case Ack:
