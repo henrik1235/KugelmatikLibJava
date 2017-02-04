@@ -8,6 +8,7 @@ public abstract class SimpleKugelmatik {
     private Log log = new Log(LogLevel.Debug);
     private Kugelmatik kugelmatik;
 
+    private boolean isRunning = false;
     private long lastPing = 0;
     private long lastData = 0;
 
@@ -33,6 +34,10 @@ public abstract class SimpleKugelmatik {
      * Ruft setup() auf und ruft dann wenn eine Verbindung zu einem Cluster besteht loop() in einer Dauerschleife auf.
      */
     public void start() {
+        if (isRunning)
+            throw new IllegalStateException("Already running");
+
+        isRunning = true;
         log.info("Running SimpleKugelmatik...");
         log.info("Class name: %s", getClass().getSimpleName());
         log.info("====================");
@@ -75,6 +80,7 @@ public abstract class SimpleKugelmatik {
 
         if (kugelmatik != null)
             kugelmatik.free();
+        isRunning = false;
     }
 
     /**
