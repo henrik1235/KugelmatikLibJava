@@ -47,6 +47,8 @@ public abstract class SimpleKugelmatik {
                 log.info("====================");
                 log.info("Running loop()...");
 
+                tick();
+
                 try {
                     final long frameTime = 16;
                     while (true) {
