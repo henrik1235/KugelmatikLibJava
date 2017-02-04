@@ -12,10 +12,12 @@ public abstract class SimpleKugelmatik {
     private long lastData = 0;
 
     /**
+     * NICHT DIREKT AUFRUFEN. start() benutzen!
      * Wird zu Beginn aufgerufen, wenn start() aufgerufen wird.
      */
     protected abstract void setup();
     /**
+     * NICHT DIREKT AUFRUFEN. start() benutzen!
      * Wird in einer Dauerschleife ausgeführt, nachdem setup() aufgerufen wurde und erfolgreich eine Verbindung hergestellt wurde.
      */
     protected abstract void loop();
