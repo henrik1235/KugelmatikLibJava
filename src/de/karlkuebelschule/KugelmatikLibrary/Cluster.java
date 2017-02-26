@@ -437,7 +437,7 @@ public class Cluster {
             // Paket bestätigen
             acknowledge(revision);
 
-            kugelmatik.getLog().verbose(getUserfriendlyName() + ": Packet " + type.name() + " | Length: " + packet.getLength() + " | Revision: " + revision);
+            kugelmatik.getLog().verbose("%s: Packet %s | Length: %d | Revision: %d", getUserfriendlyName(), type.name(), packet.getLength(), revision);
             switch (type) {
                 case Ping:
                     // wir senden ein Ping Paket an das Cluster mit der Systemzeit von uns

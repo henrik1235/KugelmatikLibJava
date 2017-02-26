@@ -25,7 +25,7 @@ public class Kugelmatik {
         clusters = new Cluster[Config.KugelmatikHeight * Config.KugelmatikWidth];
 
         getLog().info("Kugelmatik Library in Java... Version %d", VERSION);
-        getLog().verbose("Creating clusters with address provider " + addressProvider.getClass().getSimpleName());
+        getLog().verbose("Creating clusters with address provider %s", addressProvider.getClass().getSimpleName());
 
         for (int x = 0; x < Config.KugelmatikWidth; x++)
             for (int y = 0; y < Config.KugelmatikHeight; y++)
@@ -87,7 +87,7 @@ public class Kugelmatik {
         for (Cluster cluster : clusters)
             anyPacketsSent |= cluster.resendPackets();
 
-        getLog().verbose("anyPacketSent = " + anyPacketsSent);
+        getLog().verbose("anyPacketSent = %s", anyPacketsSent ? "true" : "false");
         return anyPacketsSent;
     }
 
