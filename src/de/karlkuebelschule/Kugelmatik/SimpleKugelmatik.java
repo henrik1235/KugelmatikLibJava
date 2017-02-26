@@ -8,6 +8,8 @@ public abstract class SimpleKugelmatik {
     private Log log = new Log(LogLevel.Debug);
     private Kugelmatik kugelmatik;
 
+    private boolean wasStartCalled = false;
+
     private boolean isRunning = false;
     private long lastPing = 0;
     private long lastData = 0;
@@ -37,6 +39,7 @@ public abstract class SimpleKugelmatik {
         if (isRunning)
             throw new IllegalStateException("Already running");
 
+        wasStartCalled = true;
         isRunning = true;
         log.info("Running SimpleKugelmatik...");
         log.info("Class name: %s", getClass().getSimpleName());
@@ -194,6 +197,9 @@ public abstract class SimpleKugelmatik {
 
         if (kugelmatik != null)
             throw new IllegalStateException("Kugelmatik already loaded");
+
+        if (!wasStartCalled)
+            throw new IllegalStateException("SimpleKugelmatik.start() was not used");
 
         try {
             // Config setzen
