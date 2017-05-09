@@ -12,7 +12,7 @@ public class ClusterConfig {
     /**
      * Größe von ClusterConfig in Bytes.
      */
-    public static final int SIZE = 24;
+    public static final int SIZE = 26;
 
     private StepMode stepMode;
     private BrakeMode brakeMode;
@@ -27,6 +27,7 @@ public class ClusterConfig {
 
     private int brakeTicks;
     private int minStepDelta;
+    private int turnWaitTime;
 
     /**
      * Initialisert eine ClusterConfig mit Standardwerten.
@@ -46,9 +47,10 @@ public class ClusterConfig {
         brakeTicks = 10000;
 
         minStepDelta = 10;
+        turnWaitTime = 100;
     }
 
-    public ClusterConfig(StepMode stepMode, BrakeMode brakeMode, int tickTime, int homeTime, int fixTime, int maxSteps, int homeSteps, int fixSteps, int brakeTicks, int minStepDelta) {
+    public ClusterConfig(StepMode stepMode, BrakeMode brakeMode, int tickTime, int homeTime, int fixTime, int maxSteps, int homeSteps, int fixSteps, int brakeTicks, int minStepDelta, int turnWaitTime) {
         this.stepMode = stepMode;
         this.brakeMode = brakeMode;
         this.tickTime = tickTime;
@@ -59,6 +61,7 @@ public class ClusterConfig {
         this.fixSteps = fixSteps;
         this.brakeTicks = brakeTicks;
         this.minStepDelta = minStepDelta;
+        this.turnWaitTime = turnWaitTime;
     }
 
     public ClusterConfig(DataInputStream stream) throws IOException {
@@ -85,6 +88,7 @@ public class ClusterConfig {
 
         brakeTicks = BinaryHelper.flipByteOrder(stream.readShort());
         minStepDelta = BinaryHelper.flipByteOrder(stream.readShort());
+        turnWaitTime = BinaryHelper.flipByteOrder(stream.readShort());
     }
 
     public void write(ByteBuffer buffer) {
@@ -106,6 +110,7 @@ public class ClusterConfig {
 
         buffer.putShort(BinaryHelper.flipByteOrder((short)brakeTicks));
         buffer.putShort(BinaryHelper.flipByteOrder((short)minStepDelta));
+        buffer.putShort(BinaryHelper.flipByteOrder((short)turnWaitTime));
     }
 
     public StepMode getStepMode() {
@@ -186,5 +191,13 @@ public class ClusterConfig {
 
     public void setMinStepDelta(int minStepDelta) {
         this.minStepDelta = minStepDelta;
+    }
+
+    public int getTurnWaitTime() {
+        return turnWaitTime;
+    }
+
+    public void setTurnWaitTime(int turnWaitTime) {
+        this.turnWaitTime = turnWaitTime;
     }
 }
