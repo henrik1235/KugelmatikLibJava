@@ -307,6 +307,19 @@ public abstract class SimpleKugelmatik {
     }
 
     /**
+     * Lässt die Kugeln stoppen.
+     */
+    public void sendStop() {
+        if (kugelmatik == null) {
+            log.error("setAllStepper(): No Kugelmatik loaded!");
+            return;
+        }
+
+        kugelmatik.sendStop();
+        tick();
+    }
+
+    /**
      * Gibt die aktuelle Laufzeit des Systems in Sekunden zurück.
      * @return Die aktuelle Laufzeit des Systems in Sekunden zurück.
      */

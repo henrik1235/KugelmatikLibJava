@@ -75,6 +75,12 @@ public class Kugelmatik {
             cluster.blinkRed();
     }
 
+    public void sendStop() {
+        getLog().verbose("Kugelmatik.sendStop()");
+        for (Cluster cluster : clusters)
+            cluster.sendStop();
+    }
+
     /**
      * Sendet alle nicht bestätigten Packets neu
      *
