@@ -49,7 +49,7 @@ public class DatagramIncomeListener implements Runnable {
      */
     public void free() {
         if (thread != null)
-            thread.stop();
+            thread.interrupt();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class DatagramIncomeListener implements Runnable {
         byte[] buffer = new byte[Config.ReceiveBufferLength];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
-        while (true) {
+        while (!thread.isInterrupted()) {
             try {
                 if (socket.isClosed())
                     return;
