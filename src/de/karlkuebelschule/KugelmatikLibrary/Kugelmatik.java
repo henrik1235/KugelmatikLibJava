@@ -70,7 +70,7 @@ public class Kugelmatik {
      * Lässt die rote LED aller Cluster blinken
      */
     public void blinkRed() {
-        getLog().verbose("Kugelmatik.sendRed()");
+        getLog().verbose("Kugelmatik.blinkRed()");
         for (Cluster cluster : clusters)
             cluster.blinkRed();
     }
