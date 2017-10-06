@@ -76,6 +76,10 @@ public class ClusterInfo {
         return freeRam;
     }
 
+    public int getMcpStatus() {
+        return mcpStatus;
+    }
+
     public int getLoopTime() {
         return loopTime;
     }
