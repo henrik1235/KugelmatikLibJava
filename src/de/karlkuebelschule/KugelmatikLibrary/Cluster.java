@@ -413,6 +413,18 @@ public class Cluster {
         sendPacket(new PacketInfo(true));
     }
 
+    public void sendClearError() {
+        sendPacket(new ClearError());
+    }
+
+    public void sendRestart() {
+        sendPacket(new Restart());
+    }
+
+    public void sendStartOTA(String file) {
+        sendPacket(new StartOTA(file));
+    }
+
     /**
      * Wird vom DatagramIncomeListener aufgerufen wenn ein neues Packet angekommen ist
      *

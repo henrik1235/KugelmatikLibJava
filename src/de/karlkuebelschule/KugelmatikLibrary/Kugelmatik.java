@@ -6,7 +6,7 @@ import java.net.SocketException;
  * Repräsentiert eine Kugelmatik
  */
 public class Kugelmatik {
-    public static final int VERSION = 23;
+    public static final int VERSION = 24;
 
     private Cluster[] clusters;
     private Log log;

@@ -32,7 +32,10 @@ public enum PacketType {
     Stop((byte) 19),
 
     SetData((byte)20),
-    Config2((byte)21);
+    Config2((byte)21),
+    ClearError((byte)22),
+    Restart((byte)23),
+    StartOTA((byte)24);
 
     private byte numVal;
 
