@@ -5,7 +5,7 @@ package de.karlkuebelschule.KugelmatikLibrary;
  */
 public enum ErrorCode {
     None(0),
-    TooShort(1),
+    PacketTooShort(1),
     InvalidX(2),
     InvalidY(3),
     InvalidMagic(4),
@@ -27,6 +27,8 @@ public enum ErrorCode {
     McpFault7(19),
     McpFault8(20),
 
+    InternalWrongParameter(252),
+    InternalLoopValuesWrong(253),
     InternalDefaultConfigFault(254),
     Internal(255),
     UnknownError(Integer.MAX_VALUE);
